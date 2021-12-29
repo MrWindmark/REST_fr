@@ -3,6 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from uuid import uuid4
 
 
+class Groups(models.Model):
+    name = models.CharField(max_length=32, blank=False, unique=True)
+
+
 # Create your models here.
 class User(AbstractUser):
     uuid = models.UUIDField(primary_key=True, default=uuid4())
