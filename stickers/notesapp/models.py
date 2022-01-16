@@ -1,11 +1,14 @@
 from django.db import models
 from uuid import uuid4
+from userapp.models import User
 
 
 # Create your models here.
 class Project(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid4())
     name = models.CharField(max_length=64, blank=False, unique=True)
+    repo_link = models.CharField(max_length=256, blank=True)
+    included_users = models.ManyToManyField(User)
 
     def __str__(self):
         return self.name
@@ -22,6 +25,7 @@ class Notes(models.Model):
     task_date = models.DateField(verbose_name='Дата выполнения', name='Дата')
     is_complited = models.BooleanField(default=False)
     project_id = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
