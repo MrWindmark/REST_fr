@@ -1,5 +1,6 @@
 from rest_framework.serializers import HyperlinkedModelSerializer
 from .models import Project, Notes
+from userapp.serializers import UserModelSerializer
 
 
 class ProjectsModelSerializer(HyperlinkedModelSerializer):
@@ -11,4 +12,4 @@ class ProjectsModelSerializer(HyperlinkedModelSerializer):
 class NotesModelSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Notes
-        fields = '__all__'
+        exclude = ['updated_at']
