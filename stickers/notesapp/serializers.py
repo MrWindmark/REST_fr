@@ -6,7 +6,7 @@ from userapp.serializers import UserModelSerializer
 class ProjectsModelSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Project
-        fields = ('name', 'repo_link', 'included_users')
+        fields = ('uuid', 'name', 'repo_link', 'included_users')
 
 
 class NotesModelSerializer(HyperlinkedModelSerializer):
@@ -24,4 +24,4 @@ class ProjectsModelAPISerializer(ModelSerializer):
 class NotesModelAPISerializer(ModelSerializer):
     class Meta:
         model = Notes
-        fields = '__all__'
+        exclude = ['updated_at']

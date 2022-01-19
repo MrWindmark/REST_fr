@@ -17,13 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from userapp.views import UserModelViewSet
-from notesapp.views import ProjectModelViewSet, NoteModelViewSet
-from notesapp.views import ProjectModelViewAPISet, NoteModelViewAPISet
+from notesapp.views import ProjectModelViewSet, NoteModelViewSet, NoteModelCreateViewAPISet
+from notesapp.views import ProjectModelViewAPISet, NoteModelListViewAPISet
+from notesapp.views import ProjectViewSet
 
 router = DefaultRouter()
 router.register('users', UserModelViewSet)
 router.register('projects', ProjectModelViewSet)
 router.register('notes', NoteModelViewSet)
+router.register('v1-projects', ProjectViewSet, basename='project')
 # router.register('list-projects', ProjectModelViewAPISet, basename='project')
 # router.register('list-notes', NoteModelViewAPISet, basename='notes')
 
@@ -32,5 +34,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls)),
     path('v2/projects', ProjectModelViewAPISet.as_view()),
-    path('v2/notes', NoteModelViewAPISet.as_view()),
+    path('v2/notes/list', NoteModelListViewAPISet.as_view()),
+    path('v2/notes/add', NoteModelCreateViewAPISet.as_view()),
 ]
