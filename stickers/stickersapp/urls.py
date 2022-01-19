@@ -25,7 +25,7 @@ router = DefaultRouter()
 router.register('users', UserModelViewSet)
 router.register('projects', ProjectModelViewSet)
 router.register('notes', NoteModelViewSet)
-router.register('v1-projects', ProjectViewSet, basename='project')
+# router.register('v1-projects', ProjectViewSet, basename='project')
 # router.register('list-projects', ProjectModelViewAPISet, basename='project')
 # router.register('list-notes', NoteModelViewAPISet, basename='notes')
 
