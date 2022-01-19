@@ -4,7 +4,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.views import APIView
-from django_filters import rest_framework as filters
+from rest_framework.pagination import LimitOffsetPagination
 
 # Create your views here.
 from notesapp.models import Project, Notes
@@ -58,3 +58,13 @@ class ProjectViewSet(ViewSet):
         context = {'request': request}
         serializer = ProjectsModelSerializer(queryset, context=context)
         return Response(serializer.data)
+
+
+class NotesLimitOffsetPagination(LimitOffsetPagination):
+    default_limit = 3
+
+
+class NotesLimitOffsetPaginatonViewSet(ModelViewSet):
+    queryset = Notes.objects.all()
+    serializer_class = NotesModelSerializer
+    pagination_class = NotesLimitOffsetPagination

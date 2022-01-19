@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from userapp.views import UserModelViewSet
-from notesapp.views import ProjectModelViewSet, NoteModelViewSet, NoteModelCreateViewAPISet
+from notesapp.views import ProjectModelViewSet, NoteModelViewSet, NoteModelCreateViewAPISet, \
+    NotesLimitOffsetPaginatonViewSet
 from notesapp.views import ProjectModelViewAPISet, NoteModelListViewAPISet
 from notesapp.views import ProjectViewSet
 
@@ -25,6 +26,7 @@ router = DefaultRouter()
 router.register('users', UserModelViewSet)
 router.register('projects', ProjectModelViewSet)
 router.register('notes', NoteModelViewSet)
+router.register('pagination', NotesLimitOffsetPaginatonViewSet)
 # router.register('v1-projects', ProjectViewSet, basename='project')
 # router.register('list-projects', ProjectModelViewAPISet, basename='project')
 # router.register('list-notes', NoteModelViewAPISet, basename='notes')
