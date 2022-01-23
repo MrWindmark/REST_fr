@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from uuid import uuid4
 from userapp.models import User
@@ -22,7 +24,7 @@ class Notes(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid4, unique=True, null=False)
     title = models.CharField(max_length=48, blank=True, unique=False)
     inner_text = models.TextField(blank=True)
-    task_date = models.DateField(verbose_name='Дата выполнения', name='Дата')
+    task_date = models.DateField(verbose_name='Completion date', name='Date', default=datetime.date)
     is_complited = models.BooleanField(default=False)
     project_id = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
