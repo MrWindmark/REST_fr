@@ -6,6 +6,7 @@ import './App.css';
 import UserList from './components/User.js'
 import ProjectList from "./components/Projects";
 import NotesList from "./components/Notes";
+import UserNotesList from "./components/UserNotes";
 
 
 const NotFound404 = ({location}) => {
@@ -73,7 +74,7 @@ class App extends React.Component {
                     <Routes>
                         <Route path='/' element={<UserList users={this.state.users}/>}/>
                         <Route path="/users" element={<Navigate replace to="/" />} />
-                        <Route path="/user/:id" element={<UserList users={this.state.users}/>} />
+                        <Route path="/user/:id" element={<UserNotesList notes={this.state.notes}/>} />
                         <Route path='/projects' element={<ProjectList projects={this.state.projects}/>}/>
                         <Route path='/notes' element={<NotesList notes={this.state.notes}/>}/>
                         <Route component={NotFound404}/>
