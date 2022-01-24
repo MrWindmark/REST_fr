@@ -6,6 +6,13 @@ from uuid import uuid4
 class Groups(models.Model):
     name = models.CharField(max_length=32, blank=False, unique=True)
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Group'
+        verbose_name_plural = 'Groups'
+
 
 # Create your models here.
 class User(AbstractUser):
@@ -16,3 +23,10 @@ class User(AbstractUser):
                                 choices=(('UR', 'User'), ('AD', 'Admin'), ('MD', 'Modaretor')))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'

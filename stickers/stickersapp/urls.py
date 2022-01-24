@@ -1,4 +1,4 @@
-"""stickers URL Configuration
+"""stickersapp URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -17,9 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from userapp.views import UserModelViewSet
+from notesapp.views import ProjectModelViewSet, NoteModelViewSet
 
 router = DefaultRouter()
 router.register('users', UserModelViewSet)
+router.register('projects', ProjectModelViewSet)
+router.register('notes', NoteModelViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
