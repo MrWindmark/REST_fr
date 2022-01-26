@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 from userapp.views import UserModelViewSet
 from notesapp.views import ProjectModelViewSet, NoteModelViewSet, NoteModelCreateViewAPISet, \
@@ -34,6 +35,7 @@ router.register('pagination', NotesLimitOffsetPaginatonViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', obtain_auth_token),
     path('api/', include(router.urls)),
     path('v2/projects', ProjectModelViewAPISet.as_view()),
     path('v2/notes/list', NoteModelListViewAPISet.as_view()),

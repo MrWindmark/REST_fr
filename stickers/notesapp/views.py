@@ -1,5 +1,6 @@
 import django_filters.rest_framework
 from rest_framework.generics import ListAPIView, CreateAPIView, get_object_or_404
+from rest_framework.permissions import AllowAny
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
@@ -10,6 +11,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from notesapp.models import Project, Notes
 from notesapp.serializers import ProjectsModelSerializer, NotesModelSerializer
 from notesapp.serializers import ProjectsModelAPISerializer, NotesModelAPISerializer
+from notesapp.permissions import StaffOnly
 
 
 class ProjectModelViewSet(ModelViewSet):
@@ -25,6 +27,7 @@ class NoteModelViewSet(ModelViewSet):
 
 class ProjectModelViewAPISet(APIView):
     renderer_classes = [JSONRenderer]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         projects = Project.objects.all()
