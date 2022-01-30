@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 
 const ProjectItem = ({project}) => {
-    let users = project.included_users.map((elem) => <Link to={`/user/${elem.uuid}`}>{elem.username.toString() + ' '}</Link>)
+    let users = project.included_users.map((elem) => <Link to={`/notes/user/${elem.id}`}>{elem.username.toString() + ' '}</Link>)
 
 
     let data = (<tr>

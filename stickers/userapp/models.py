@@ -16,7 +16,7 @@ class Groups(models.Model):
 
 # Create your models here.
 class User(AbstractUser):
-    uuid = models.UUIDField(primary_key=True, default=uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid4)
     username = models.CharField(max_length=64, null=False, unique=True)
     email = models.EmailField(unique=True, max_length=254)
     category = models.CharField(max_length=2, null=False,
