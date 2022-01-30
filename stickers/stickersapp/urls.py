@@ -22,6 +22,7 @@ from notesapp.views import ProjectModelViewSet, NoteModelViewSet, NoteModelCreat
     NotesLimitOffsetPaginatonViewSet
 from notesapp.views import ProjectModelViewAPISet, NoteModelListViewAPISet
 from notesapp.views import ProjectViewSet
+from rest_framework_simplejwt import views as jwt_views
 
 router = DefaultRouter()
 router.register('users', UserModelViewSet)
@@ -33,11 +34,13 @@ router.register('pagination', NotesLimitOffsetPaginatonViewSet)
 # router.register('list-notes', NoteModelViewAPISet, basename='notes')
 
 urlpatterns = [
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('api-token-auth/', obtain_auth_token),
+    # path('api-auth/', include('rest_framework.urls')),
+    # path('api-token-auth/', obtain_auth_token),
     path('api/', include(router.urls)),
-    path('v2/projects', ProjectModelViewAPISet.as_view()),
-    path('v2/notes/list', NoteModelListViewAPISet.as_view()),
-    path('v2/notes/add', NoteModelCreateViewAPISet.as_view()),
+    # path('v2/projects', ProjectModelViewAPISet.as_view()),
+    # path('v2/notes/list', NoteModelListViewAPISet.as_view()),
+    # path('v2/notes/add', NoteModelCreateViewAPISet.as_view()),
 ]

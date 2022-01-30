@@ -1,6 +1,6 @@
 import django_filters.rest_framework
 from rest_framework.generics import ListAPIView, CreateAPIView, get_object_or_404
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
@@ -17,6 +17,7 @@ from notesapp.permissions import StaffOnly
 class ProjectModelViewSet(ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectsModelSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class NoteModelViewSet(ModelViewSet):
@@ -27,7 +28,7 @@ class NoteModelViewSet(ModelViewSet):
 
 class ProjectModelViewAPISet(APIView):
     renderer_classes = [JSONRenderer]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         projects = Project.objects.all()
@@ -35,10 +36,16 @@ class ProjectModelViewAPISet(APIView):
         return Response(serializer.data)
 
 
-class NoteModelListViewAPISet(ListAPIView):
+class NoteModelListViewAPISet(APIView):
     renderer_classes = [JSONRenderer]
-    queryset = Notes.objects.all()
-    serializer_class = NotesModelAPISerializer
+    # queryset = Notes.objects.all()
+    # serializer_class = NotesModelAPISerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        notes = Notes.objects.all()
+        serializer = NotesModelAPISerializer(notes, many=True)
+        return Response(serializer.data)
 
 
 class NoteModelCreateViewAPISet(CreateAPIView):

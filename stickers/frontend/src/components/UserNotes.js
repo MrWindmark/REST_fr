@@ -3,7 +3,7 @@ import React from "react";
 
 const UserNotesList = ({notes}) => {
     let {id} = useParams();
-    let filtered_users = notes.filter((note) => note.creator.uuid == id)
+    let filtered_users = notes.filter((note) => note.creator.id === id)
      return (
         <table>
             <th>Название</th>
