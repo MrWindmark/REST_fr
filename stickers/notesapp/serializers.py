@@ -1,8 +1,6 @@
-from rest_framework import serializers
-from rest_framework.relations import StringRelatedField
 from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 from .models import Project, Notes
-from userapp.serializers import UserModelSerializer
+from userapp.serializers import UserModelSerializer, BaseUserModelSerializer
 
 
 class ProjectsModelSerializer(HyperlinkedModelSerializer):
@@ -32,3 +30,29 @@ class NotesModelAPISerializer(ModelSerializer):
     class Meta:
         model = Notes
         exclude = ['updated_at']
+
+
+class BaseProjectsModelSerializer(ModelSerializer):
+    serializer_class = UserModelSerializer
+
+    class Meta:
+        model = Project
+        fields = '__all__'
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return UserModelSerializer
+        return BaseUserModelSerializer
+
+
+class BaseNotesModelSerializer(ModelSerializer):
+    serializer_class = ProjectsModelSerializer
+
+    class Meta:
+        model = Notes
+        fields = '__all__'
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return ProjectsModelSerializer
+        return BaseProjectsModelSerializer
