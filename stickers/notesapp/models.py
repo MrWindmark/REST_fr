@@ -13,7 +13,7 @@ class Project(models.Model):
     included_users = models.ManyToManyField(User)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     class Meta:
         verbose_name = 'Project'
@@ -24,7 +24,7 @@ class Notes(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid4, unique=True, null=False)
     title = models.CharField(max_length=48, blank=True, unique=False)
     inner_text = models.TextField(blank=True)
-    task_date = models.DateField(verbose_name='Completion date', name='Date', default=datetime.date)
+    task_date = models.DateField(verbose_name='Completion date', name='Date', default=datetime.date.today())
     is_complited = models.BooleanField(default=False)
     project_id = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
