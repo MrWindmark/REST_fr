@@ -9,7 +9,7 @@ const NoteItem = ({note}) => {
             <td>{note.created_at}</td>
             <td>{note.Date}</td>
             <td>{note.is_complited.toString()}</td>
-            <td>{note.creator.username}</td>
+            <td>{note.project_id.name}</td>
         </tr>
     )
 }
@@ -22,7 +22,7 @@ const NotesList = ({notes}) => {
             <th>Дата создания</th>
             <th>Дата завершения</th>
             <th>Статус</th>
-            <th>Создатель</th>
+            <th>Имя проекта</th>
             {notes.map((elem) => <NoteItem note={elem}/>)}
         </table>
     )
