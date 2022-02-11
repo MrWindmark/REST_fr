@@ -7,7 +7,7 @@ from userapp.models import User
 class ProjectType(DjangoObjectType):
     class Meta:
         model = Project
-        fields = ('name', 'repo_link', 'included_users')
+        fields = ('uuid', 'name', 'repo_link', 'included_users')
 
 
 class NotesType(DjangoObjectType):
@@ -60,6 +60,7 @@ class Query(graphene.ObjectType):
 
 class ProjectMutation(graphene.Mutation):
     class Arguments:
+        uuid = graphene.String(required=True)
         name = graphene.String(required=False)
         repo_link = graphene.String(required=False)
 
@@ -68,8 +69,10 @@ class ProjectMutation(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, name, repo_link, uuid):
         project = Project.objects.get(pk=uuid)
-        project.name = name
-        project.repo_link = repo_link
+        if name:
+            project.name = name
+        if repo_link:
+            project.repo_link = repo_link
         project.save()
         return ProjectMutation(project=project)
 
