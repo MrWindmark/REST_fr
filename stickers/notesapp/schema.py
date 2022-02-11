@@ -75,7 +75,7 @@ class ProjectMutation(graphene.Mutation):
 
 
 class Mutation(graphene.ObjectType):
-    update_author = ProjectMutation.Field()
+    update_project = ProjectMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
