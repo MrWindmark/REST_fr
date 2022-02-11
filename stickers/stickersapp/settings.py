@@ -46,12 +46,18 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'drf_yasg',
+    'graphene',
+    'graphene_django',
     # own creation apps
     'userapp',
     'authors',
     'corsheaders',
     'notesapp',
 ]
+
+GRAPHENE = {
+    'SCHEMA': 'notesapp.schema.schema' # Where your Graphene schema lives
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
