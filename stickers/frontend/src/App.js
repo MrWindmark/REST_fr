@@ -71,6 +71,7 @@ class App extends React.Component {
     }
 
     refresh_token() {
+        console.log(`We are in refresh line and do refresh!`)
         const cookies = new Cookies()
         const refresh = cookies.get('refresh_token')
         axios.post('http://127.0.0.1:8000/api/token/refresh/', {refresh})
@@ -96,35 +97,46 @@ class App extends React.Component {
             'http://localhost:8000/api/notes'
         ]
         const headers = this.get_headers()
-        // this.refresh_token()
+        let req = urls.map(url => axios.get(url))
 
-        Promise.all([
-            axios.get(urls[0], {headers}),
-            axios.get(urls[1], {headers}),
-            axios.get(urls[2], {headers})
-        ]).then(response => {
-            // not work anyway...
-            if (response[0].status !== 200 || response[1].status !== 200 || response[2].status !== 200) {
-                console.log(`We are here and do refresh. ${response[0].status} - ${response[1].status} - ${response[2].status}`)
+        Promise.all(req)
+            .then(response => {
+                // not work anyway...
+                response.forEach((result) => {
+                    if (result.status == "rejected") {
+                        this.refresh_token()
+                        this.load_data()
+                    }
+                });
+
+                if (response[0].status !== 200 || response[1].status !== 200 || response[2].status !== 200) {
+                    console.log(
+                        `We are here and do refresh.
+                        ${response[0].status} - ${response[1].status} - ${response[2].status}`
+                    )
+                    this.refresh_token()
+                    this.load_data()
+                }
+                // else {
+                const users = response[0].data['results']
+                const projects = response[1].data['results']
+                const notes = response[2].data['results']
+                console.log(users, projects, notes)
+                this.setState(
+                    {
+                        'users': users,
+                        'projects': projects,
+                        'notes': notes
+                    }
+                )
+                // }
+            }).catch(error => {
+                console.log(`We are in catch and do refresh.`)
                 this.refresh_token()
                 this.load_data()
+                console.log(error)
             }
-            // else {
-            const users = response[0].data['results']
-            const projects = response[1].data['results']
-            const notes = response[2].data['results']
-            console.log(users, projects, notes)
-            this.setState(
-                {
-                    'users': users,
-                    'projects': projects,
-                    'notes': notes
-                }
-            )
-            // }
-        }).catch(error => {
-            console.log(error)
-        })
+        )
     }
 
     componentDidMount() {
