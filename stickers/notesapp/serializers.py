@@ -48,7 +48,7 @@ class BaseNotesModelSerializer(ModelSerializer):
 
     class Meta:
         model = Notes
-        fields = ('title', 'inner_text', 'created_at', 'Date', 'is_complited', 'project_id')
+        fields = ('uuid', 'title', 'inner_text', 'created_at', 'Date', 'is_complited', 'project_id')
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:

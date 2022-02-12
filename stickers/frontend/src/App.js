@@ -1,6 +1,6 @@
 import React from "react";
 import axios from 'axios';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import {BrowserRouter, Link, Navigate, Route, Routes} from 'react-router-dom'
 import './App.css';
 import UserList from './components/User.js'
@@ -9,7 +9,7 @@ import NotesList from "./components/Notes";
 import UserNotesList from "./components/UserNotes";
 import LoginForm from "./components/auth";
 import Cookies from 'universal-cookie';
-import {useNavigate} from "react-router";
+// import {useNavigate} from "react-router";
 
 
 const NotFound404 = ({location}) => {
@@ -43,7 +43,7 @@ class App extends React.Component {
     }
 
     is_authenticated() {
-        return this.state.token != ''
+        return this.state.token !== ''
     }
 
     logout() {
@@ -96,33 +96,49 @@ class App extends React.Component {
             'http://localhost:8000/api/notes'
         ]
         const headers = this.get_headers()
+        // this.refresh_token()
 
         Promise.all([
             axios.get(urls[0], {headers}),
             axios.get(urls[1], {headers}),
             axios.get(urls[2], {headers})
         ]).then(response => {
+            // not work anyway...
             if (response[0].status !== 200 || response[1].status !== 200 || response[2].status !== 200) {
+                console.log(`We are here and do refresh. ${response[0].status} - ${response[1].status} - ${response[2].status}`)
                 this.refresh_token()
-            } else {
-                const users = response[0].data['results']
-                const projects = response[1].data['results']
-                const notes = response[2].data['results']
-                console.log(users, projects, notes)
-                this.setState(
-                    {
-                        'users': users,
-                        'projects': projects,
-                        'notes': notes
-                    }
-                )
+                this.load_data()
             }
-        }).catch(error => {console.log(error)})
+            // else {
+            const users = response[0].data['results']
+            const projects = response[1].data['results']
+            const notes = response[2].data['results']
+            console.log(users, projects, notes)
+            this.setState(
+                {
+                    'users': users,
+                    'projects': projects,
+                    'notes': notes
+                }
+            )
+            // }
+        }).catch(error => {
+            console.log(error)
+        })
     }
 
     componentDidMount() {
         this.get_token_from_storage()
     }
+
+    deleteNote(id) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/notes/${id}`, {headers})
+            .then(response => {
+                this.setState({notes: this.state.notes.filter((item) => item.id !== id)})
+            }).catch(error => console.log(error))
+    }
+
 
     render() {
         return (
@@ -150,7 +166,10 @@ class App extends React.Component {
                         <Route path="/users" element={<Navigate replace to="/"/>}/>
                         <Route path="/notes/user/:id" element={<UserNotesList notes={this.state.notes}/>}/>
                         <Route path='/projects' element={<ProjectList projects={this.state.projects}/>}/>
-                        <Route path='/notes' element={<NotesList notes={this.state.notes}/>}/>
+                        <Route path='/notes' element={
+                            <NotesList notes={this.state.notes}
+                                       deleteNote={(id) => this.deleteNote(id)}/>}
+                        />
                         <Route path='/login' element={<LoginForm get_token={(username, password) =>
                             this.get_token(username, password)}/>}/>
                         <Route component={NotFound404}/>
