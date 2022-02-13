@@ -26,7 +26,7 @@ class Notes(models.Model):
     inner_text = models.TextField(blank=True)
     task_date = models.DateField(verbose_name='Completion date', name='Date', default=datetime.date.today())
     is_complited = models.BooleanField(default=False)
-    project_id = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    project_id = models.ForeignKey(Project, on_delete=models.DO_NOTHING, blank=True, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True, null=False)
     updated_at = models.DateField(auto_now=True)

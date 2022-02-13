@@ -9,6 +9,7 @@ import NotesList from "./components/Notes";
 import UserNotesList from "./components/UserNotes";
 import LoginForm from "./components/auth";
 import Cookies from 'universal-cookie';
+import NoteCreateForm from "./components/NoteCreateForm";
 // import {useNavigate} from "react-router";
 
 
@@ -35,11 +36,12 @@ class App extends React.Component {
         }
     }
 
-    set_token(token, refresh) {
+    set_token(token, refresh, username) {
         const cookies = new Cookies()
         cookies.set('token', token)
         cookies.set('refresh_token', refresh)
-        this.setState({'token': token, 'refresh': refresh}, () => this.load_data())
+        cookies.set('username', username)
+        this.setState({'token': token, 'refresh': refresh, 'username': username}, () => this.load_data())
     }
 
     is_authenticated() {
@@ -55,17 +57,25 @@ class App extends React.Component {
         })
     }
 
+    get_username_from_storage() {
+        const cookies = new Cookies()
+        const username = cookies.get('username')
+        this.setState({'username': username}, () => this.load_data())
+        return this.state.username
+    }
+
     get_token_from_storage() {
         const cookies = new Cookies()
         const token = cookies.get('token')
         const refresh = cookies.get('refresh_token')
+
         this.setState({'token': token, 'refresh_token': refresh}, () => this.load_data())
     }
 
     get_token(username, password) {
         axios.post('http://127.0.0.1:8000/api/token/', {username: username, password: password})
             .then(response => {
-                this.set_token(response.data['access'], response.data['refresh'])
+                this.set_token(response.data['access'], response.data['refresh'], username)
             }).catch(error => alert('Неверный логин или пароль'))
         // .then(() => alert(this.state.token))
     }
@@ -147,7 +157,30 @@ class App extends React.Component {
         const headers = this.get_headers()
         axios.delete(`http://127.0.0.1:8000/api/notes/${id}`, {headers})
             .then(response => {
-                this.setState({notes: this.state.notes.filter((item) => item.id !== id)})
+                this.setState({notes: this.state.notes.filter(item => item.uuid !== id)})
+            }).catch(error => console.log(error))
+    }
+
+    createNote(name, project, inner_text, date) {
+        const headers = this.get_headers()
+        const user_creator = this.get_username_from_storage()
+        let creator = this.state.users.find(item => item.username === user_creator)
+        let obj_project = this.state.projects.find(elem => elem.uuid === project)
+        const data = {
+            title: name,
+            project_id: obj_project.uuid,
+            inner_text: inner_text,
+            Date: date,
+            creator: creator.id
+        }
+        console.log(data)
+
+        axios.post(`http://127.0.0.1:8000/v2/notes/add`, data, {headers})
+            .then(response => {
+                let new_note = response.data
+                const user_creator = this.state.users.filter((item) => item.id === new_note.creator)[0]
+                new_note.creator = user_creator
+                this.setState({notes: [...this.state.notes, new_note]})
             }).catch(error => console.log(error))
     }
 
@@ -181,6 +214,12 @@ class App extends React.Component {
                         <Route path='/notes' element={
                             <NotesList notes={this.state.notes}
                                        deleteNote={(id) => this.deleteNote(id)}/>}
+                        />
+                        <Route path='/notes/create' element={
+                            <NoteCreateForm projects={this.state.projects}
+                            createNote={(name, project, inner_text, date, creator) => this.createNote(
+                                name, project, inner_text, date, creator)}
+                            />}
                         />
                         <Route path='/login' element={<LoginForm get_token={(username, password) =>
                             this.get_token(username, password)}/>}/>

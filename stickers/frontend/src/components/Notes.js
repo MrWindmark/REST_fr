@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 
 const NoteItem = ({note, deleteNote}) => {
@@ -19,16 +20,19 @@ const NoteItem = ({note, deleteNote}) => {
 
 const NotesList = ({notes, deleteNote}) => {
     return (
-        <table>
-            <th>Название</th>
-            <th>Описание</th>
-            <th>Дата создания</th>
-            <th>Дата завершения</th>
-            <th>Статус</th>
-            <th>Имя проекта</th>
-            <th></th>
-            {notes.map((elem) => <NoteItem note={elem} deleteNote={deleteNote}/>)}
-        </table>
+        <div>
+            <Link to='/notes/create'>Create</Link>
+            <table>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Дата создания</th>
+                <th>Дата завершения</th>
+                <th>Статус</th>
+                <th>Имя проекта</th>
+                <th></th>
+                {notes.map((elem) => <NoteItem note={elem} deleteNote={deleteNote}/>)}
+            </table>
+        </div>
     )
 }
 

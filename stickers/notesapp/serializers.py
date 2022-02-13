@@ -17,7 +17,7 @@ class BaseProjectsModelSerializer(ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('name', 'repo_link', 'included_users')
+        fields = ('uuid', 'name', 'repo_link', 'included_users')
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
@@ -31,7 +31,7 @@ class ProjectsModelSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('name', 'repo_link', 'included_users')
+        fields = ('uuid', 'name', 'repo_link', 'included_users')
 
 
 # v1
@@ -48,18 +48,29 @@ class BaseNotesModelSerializer(ModelSerializer):
 
     class Meta:
         model = Notes
-        fields = ('uuid', 'title', 'inner_text', 'created_at', 'Date', 'is_complited', 'project_id')
+        fields = ('uuid', 'title', 'inner_text', 'created_at', 'Date', 'is_complited', 'project_id', 'creator')
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
             return ProjectsModelSerializer
         return BaseProjectsModelSerializer
 
+    def create(self, validated_data):
+        print(validated_data)
+        caretaker = Notes.objects.create(
+            title=validated_data['title'],
+            inner_text=validated_data['inner_text'],
+            Date=validated_data['Date'],
+            creator=validated_data['creator'],
+            project_id=validated_data['project_id']
+        )
+        return super(BaseNotesModelSerializer, self).create(validated_data)
+
 
 # v1.3
 class NotesModelSerializer(HyperlinkedModelSerializer):
     project_id = ProjectsModelSerializer(read_only=True)
-    creator = UserModelSerializer(read_only=True)
+    creator = UserModelSerializer(read_only=False)
 
     class Meta:
         model = Notes
