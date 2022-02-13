@@ -23,7 +23,8 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt import views as jwt_views
 
 from userapp.views import UserModelViewSet
-from notesapp.views import ProjectModelViewSet, NoteModelViewSet, NotesLimitOffsetPaginatonViewSet
+from notesapp.views import ProjectModelViewSet, NoteModelViewSet, NotesLimitOffsetPaginatonViewSet, \
+    NoteModelCreateViewAPISet
 # from notesapp.views import NoteModelCreateViewAPISet
 # from notesapp.views import ProjectModelViewAPISet, NoteModelListViewAPISet
 # from notesapp.views import ProjectViewSet
@@ -63,7 +64,7 @@ urlpatterns = [
     path('api/v<int:version>/notes', NoteModelViewSet.as_view({'get': 'list'}), name='notes_api'),
     # path('v2/projects', ProjectModelViewAPISet.as_view()),
     # path('v2/notes/list', NoteModelListViewAPISet.as_view()),
-    # path('v2/notes/add', NoteModelCreateViewAPISet.as_view()),
+    path('v2/notes/add', NoteModelCreateViewAPISet.as_view()),
     path("graphql/", GraphQLView.as_view(graphiql=True)),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
