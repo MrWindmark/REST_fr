@@ -112,20 +112,20 @@ class App extends React.Component {
         Promise.all(req)
             .then(response => {
                 // not work anyway...
-                response.forEach((result) => {
-                    if (result.status == "rejected") {
-                        this.refresh_token()
-                        this.load_data()
-                    }
-                });
+                // response.forEach((result) => {
+                //     if (result.status == "rejected") {
+                //         this.refresh_token()
+                //         this.load_data()
+                //     }
+                // });
 
                 if (response[0].status !== 200 || response[1].status !== 200 || response[2].status !== 200) {
                     console.log(
-                        `We are here and do refresh.
+                        `We are here and we need to do refresh.
                         ${response[0].status} - ${response[1].status} - ${response[2].status}`
                     )
-                    this.refresh_token()
-                    this.load_data()
+                    // this.refresh_token()
+                    // this.load_data()
                 }
                 // else {
                 const users = response[0].data['results']
@@ -142,8 +142,8 @@ class App extends React.Component {
                 // }
             }).catch(error => {
                 console.log(`We are in catch and do refresh.`)
-                this.refresh_token()
-                this.load_data()
+                // this.refresh_token()
+                // this.load_data()
                 console.log(error)
             }
         )

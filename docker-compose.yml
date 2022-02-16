@@ -36,3 +36,9 @@ services:
       - 8000:80
     depends_on:
       - backend
+  frontend:
+    build: ./stickers/frontend
+    ports:
+      - 8088:80
+    depends_on:
+      - nginx
