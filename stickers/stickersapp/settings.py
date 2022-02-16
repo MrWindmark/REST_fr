@@ -56,7 +56,7 @@ INSTALLED_APPS = [
 ]
 
 GRAPHENE = {
-    'SCHEMA': 'notesapp.schema.schema' # Where your Graphene schema lives
+    'SCHEMA': 'notesapp.schema.schema'  # Where your Graphene schema lives
 }
 
 MIDDLEWARE = [
@@ -107,11 +107,22 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
 DATABASES = {
+    # Local test DB
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+    # DB for Docker
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'library',
+    #     'USER': 'dante',
+    #     'PASSWORD': 'dante123456',
+    #     'HOST': 'db',
+    #     'PORT': '5432',
+    # }
 }
 
 # Password validation
